@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import axios from 'axios'
 
-export const Commentary = () => {
+export const Commentary = ({ navigation }) => {
   const API_KEY = 'f21e49f9d7cfb7b360cf672c2810e6d3'
   const [bibleData, setBibleData] = useState([])
 
@@ -23,6 +22,28 @@ export const Commentary = () => {
       })
   }, [])
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => (
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                      backgroundColor: '#566370',
+                      padding: 7,
+                      borderRadius: 15,
+                      marginBottom: 10
+                    }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Zjavenie</Text>
+                </TouchableOpacity>
+      ),
+      headerStyle: {
+        backgroundColor: '#2D343B',
+        shadowColor: 'transparent', // ios
+        elevation: 0 // android
+      }
+    })
+  }, [])
+
   const EachBook = ({ bookName }) => (<Text>{bookName}</Text>)
 
   const BibleBooks = () => (
@@ -33,7 +54,7 @@ export const Commentary = () => {
 
   return (
         <View style={styles.container}>
-            <StatusBar style="auto"/>
+            <StatusBar barStyle="light-content"/>
             <BibleBooks/>
         </View>
   )
