@@ -1,10 +1,13 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Modal, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import axios from 'axios'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faXmark } from '@fortawesome/free-solid-svg-icons'
 
 export const Commentary = ({ navigation }) => {
   const API_KEY = 'f21e49f9d7cfb7b360cf672c2810e6d3'
   const [bibleData, setBibleData] = useState([])
+  const [modalVisible, setModalVisible] = useState(false)
 
   useEffect(() => {
     const http = axios.create({
@@ -32,7 +35,8 @@ export const Commentary = ({ navigation }) => {
                       padding: 7,
                       borderRadius: 15,
                       marginBottom: 10
-                    }}>
+                    }}
+                    onPress={() => setModalVisible(true)}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>Zjavenie</Text>
                 </TouchableOpacity>
       ),
@@ -44,7 +48,9 @@ export const Commentary = ({ navigation }) => {
     })
   }, [])
 
-  const EachBook = ({ bookName }) => (<Text>{bookName}</Text>)
+  const EachBook = ({ bookName }) => (
+        <TouchableOpacity style={{ backgroundColor: '#1B1F23', marginBottom: 5, padding: 2 }}><Text
+            style={{ color: 'white' }}>{bookName}</Text></TouchableOpacity>)
 
   const BibleBooks = () => (
         <View>
@@ -54,8 +60,27 @@ export const Commentary = ({ navigation }) => {
 
   return (
         <View style={styles.container}>
+            <View style={styles.centeredView}>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                      setModalVisible(!modalVisible)
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <BibleBooks/>
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <FontAwesomeIcon icon={faXmark} size={18} color={'white'}/>
+                            </Pressable>
+                        </View>
+                    </View>
+                </Modal>
+            </View>
             <StatusBar barStyle="light-content"/>
-            <BibleBooks/>
         </View>
   )
 }
@@ -66,5 +91,39 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    bottom: -20,
+    width: '100%',
+    backgroundColor: '#2D343B',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  button: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2
+  },
+  buttonClose: {
+    backgroundColor: '#1B1F23'
   }
 })
