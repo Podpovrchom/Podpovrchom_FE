@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { Modal, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Modal, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
@@ -48,14 +48,9 @@ export const Commentary = ({ navigation }) => {
     })
   }, [])
 
-  const EachBook = ({ bookName }) => (
-        <TouchableOpacity style={{ backgroundColor: '#1B1F23', marginBottom: 5, padding: 2 }}><Text
-            style={{ color: 'white' }}>{bookName}</Text></TouchableOpacity>)
-
-  const BibleBooks = () => (
-        <View>
-            {bibleData.data && bibleData.data.map(date => (<EachBook bookName={date.name} key={date.name}/>))}
-        </View>
+  const Item = ({ bookName }) => (
+        <TouchableOpacity style={{ backgroundColor: '#2D343B', marginBottom: 7, padding: 12, borderRadius: 7 }}><Text
+            style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>{bookName}</Text></TouchableOpacity>
   )
 
   return (
@@ -70,7 +65,16 @@ export const Commentary = ({ navigation }) => {
                     }}>
                     <View style={styles.centeredView}>
                         <View style={styles.modalView}>
-                            <BibleBooks/>
+                            <View style={{ marginTop: 5, marginBottom: 15 }}>
+                                <Text style={{ fontSize: 18, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                                    Nový Zákon
+                                </Text>
+                            </View>
+                            <FlatList
+                                data={bibleData.data}
+                                renderItem={({ item }) => <Item bookName={item.name}/>}
+                                keyExtractor={item => item.name}
+                            />
                             <Pressable
                                 style={[styles.button, styles.buttonClose]}
                                 onPress={() => setModalVisible(!modalVisible)}>
@@ -99,13 +103,13 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalView: {
-    margin: 20,
-    bottom: -20,
     width: '100%',
-    backgroundColor: '#2D343B',
+    height: '97%',
+    bottom: -20,
+    margin: 20,
+    backgroundColor: '#1B1F23',
     borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
+    padding: 15,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -117,13 +121,13 @@ const styles = StyleSheet.create({
   },
   button: {
     position: 'absolute',
-    top: 10,
-    right: 10,
+    top: 12,
+    right: 15,
     borderRadius: 20,
-    padding: 10,
+    padding: 8,
     elevation: 2
   },
   buttonClose: {
-    backgroundColor: '#1B1F23'
+    backgroundColor: '#2D343B'
   }
 })
