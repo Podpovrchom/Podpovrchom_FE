@@ -9,7 +9,7 @@ export const Commentary = ({ navigation }) => {
   const [bibleData, setBibleData] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
   const [bookData, setBookData] = useState([])
-  const [chaptersNumber, setChaptersNumber] = useState(2)
+  const [chaptersNumber, setChaptersNumber] = useState(null)
   const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
 
