@@ -11,6 +11,7 @@ export const Commentary = ({ navigation }) => {
   const [bookData, setBookData] = useState([])
   const [chaptersNumber, setChaptersNumber] = useState(2)
   const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
+  const [chapterVisible, setChapterVisible] = useState(currentData.book)
 
   useEffect(() => {
     const http = axios.create({
@@ -70,40 +71,45 @@ export const Commentary = ({ navigation }) => {
     })
   }, [])
 
+  const handleClick = (name) => {
+    setChapterVisible(name)
+  }
+
   const Item = ({ bookName }) => (
-        <View
-            style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
-            <TouchableOpacity style={{ padding: 15 }}>
+        <View style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
+            <TouchableOpacity onPress={() => handleClick(bookName)} style={{ padding: 15 }}>
                 <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
                     {bookName}
                 </Text>
             </TouchableOpacity>
-            <View style={{
-              paddingTop: 15,
-              paddingLeft: 20,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              width: '100%'
-            }}>
-                {Array(chaptersNumber)
-                  .fill(0)
-                  .map((x, idx) => (
-                        <TouchableOpacity key={idx} style={{
-                          backgroundColor: currentData.book === bookName && currentData.chapter === (idx + 1) ? '#566370' : '#2D343B',
-                          justifyContent: 'center',
-                          alignSelf: 'flex-start',
-                          width: 40,
-                          height: 40,
-                          borderRadius: 20,
-                          marginRight: 15,
-                          marginBottom: 15
-                        }}>
-                            <Text style={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-                                {idx + 1}
-                            </Text>
-                        </TouchableOpacity>
-                  ))}
-            </View>
+            {chapterVisible === bookName && (
+                <View style={{
+                  paddingTop: 15,
+                  paddingLeft: 20,
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  width: '100%'
+                }}>
+                    {Array(chaptersNumber)
+                      .fill(0)
+                      .map((x, idx) => (
+                            <TouchableOpacity key={idx} style={{
+                              backgroundColor: currentData.book === bookName && currentData.chapter === (idx + 1) ? '#566370' : '#2D343B',
+                              justifyContent: 'center',
+                              alignSelf: 'flex-start',
+                              width: 40,
+                              height: 40,
+                              borderRadius: 20,
+                              marginRight: 15,
+                              marginBottom: 15
+                            }}>
+                                <Text style={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                                    {idx + 1}
+                                </Text>
+                            </TouchableOpacity>
+                      ))}
+                </View>
+            )}
         </View>
   )
 
@@ -140,7 +146,6 @@ export const Commentary = ({ navigation }) => {
                         </View>
                     </Modal>
                 )}
-
             </View>
             <StatusBar barStyle="light-content"/>
         </View>
