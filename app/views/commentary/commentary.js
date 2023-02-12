@@ -8,6 +8,9 @@ export const Commentary = ({ navigation }) => {
   const API_KEY = 'f21e49f9d7cfb7b360cf672c2810e6d3'
   const [bibleData, setBibleData] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
+  const [bookData, setBookData] = useState([])
+  const [chaptersNumber, setChaptersNumber] = useState(2)
+  const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
 
   useEffect(() => {
     const http = axios.create({
@@ -23,7 +26,24 @@ export const Commentary = ({ navigation }) => {
         // handle error
         alert(error.message)
       })
+    getBookData()
   }, [])
+
+  const getBookData = () => {
+    const http = axios.create({
+      baseURL: 'https://api.scripture.api.bible/v1',
+      headers: { 'api-key': API_KEY }
+    })
+    http
+      .get('/bibles/c0209b58481727a2-01/books/REV/chapters').then(response => {
+        setBookData(response.data.data)
+        setChaptersNumber(response.data.data.length)
+      })
+      .catch(function (error) {
+        // handle error
+        alert(error.message)
+      })
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -36,8 +56,10 @@ export const Commentary = ({ navigation }) => {
                       borderRadius: 15,
                       marginBottom: 10
                     }}
-                    onPress={() => setModalVisible(true)}>
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>Zjavenie</Text>
+                    onPress={() => {
+                      setModalVisible(true)
+                    }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
                 </TouchableOpacity>
       ),
       headerStyle: {
@@ -49,40 +71,76 @@ export const Commentary = ({ navigation }) => {
   }, [])
 
   const Item = ({ bookName }) => (
-        <TouchableOpacity style={{ backgroundColor: '#2D343B', marginBottom: 7, padding: 12, borderRadius: 7 }}><Text
-            style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>{bookName}</Text></TouchableOpacity>
+        <View
+            style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
+            <TouchableOpacity style={{ padding: 15 }}>
+                <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
+                    {bookName}
+                </Text>
+            </TouchableOpacity>
+            <View style={{
+              paddingTop: 15,
+              paddingLeft: 20,
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              width: '100%'
+            }}>
+                {Array(chaptersNumber)
+                  .fill(0)
+                  .map((x, idx) => (
+                        <TouchableOpacity key={idx} style={{
+                          backgroundColor: currentData.book === bookName && currentData.chapter === (idx + 1) ? '#566370' : '#2D343B',
+                          justifyContent: 'center',
+                          alignSelf: 'flex-start',
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                          marginRight: 15,
+                          marginBottom: 15
+                        }}>
+                            <Text style={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                                {idx + 1}
+                            </Text>
+                        </TouchableOpacity>
+                  ))}
+            </View>
+        </View>
   )
 
   return (
         <View style={styles.container}>
             <View style={styles.centeredView}>
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
-                      setModalVisible(!modalVisible)
-                    }}>
-                    <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                            <View style={{ marginTop: 5, marginBottom: 15 }}>
-                                <Text style={{ fontSize: 18, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-                                    Nový Zákon
-                                </Text>
+                {bookData.length > 0 && (
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                          setModalVisible(!modalVisible)
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <View style={{ marginTop: 5, marginBottom: 15 }}>
+                                    <Text
+                                        style={{ fontSize: 18, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                                        Nový Zákon
+                                    </Text>
+                                </View>
+                                <FlatList
+                                    data={bibleData.data}
+                                    renderItem={({ item }) => <Item bookName={item.name}/>}
+                                    keyExtractor={item => item.name}
+                                />
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => setModalVisible(!modalVisible)}>
+                                    <FontAwesomeIcon icon={faXmark} size={18} color={'white'}/>
+                                </Pressable>
                             </View>
-                            <FlatList
-                                data={bibleData.data}
-                                renderItem={({ item }) => <Item bookName={item.name}/>}
-                                keyExtractor={item => item.name}
-                            />
-                            <Pressable
-                                style={[styles.button, styles.buttonClose]}
-                                onPress={() => setModalVisible(!modalVisible)}>
-                                <FontAwesomeIcon icon={faXmark} size={18} color={'white'}/>
-                            </Pressable>
                         </View>
-                    </View>
-                </Modal>
+                    </Modal>
+                )}
+
             </View>
             <StatusBar barStyle="light-content"/>
         </View>
