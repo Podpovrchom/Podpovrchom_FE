@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { FlatList, Modal, Pressable, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FlatList, Modal, Pressable, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
@@ -54,7 +54,7 @@ export const Commentary = ({ navigation }) => {
       headers: { 'api-key': API_KEY }
     })
     http
-      .get('/bibles/c0209b58481727a2-01/passages/REV.21?content-type=json').then(response => {
+      .get('/bibles/c0209b58481727a2-01/passages/REV.21?content-type=json&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=false&include-verse-spans=false&use-org-id=false').then(response => {
         setChapterContent(response.data.data.content)
       })
       .catch(function (error) {
@@ -132,39 +132,57 @@ export const Commentary = ({ navigation }) => {
 
   return (
         <View style={styles.container}>
-            <View style={styles.centeredView}>
-                {bookData.length > 0 && (
-                    <Modal
-                        animationType="slide"
-                        transparent={true}
-                        visible={modalVisible}
-                        onRequestClose={() => {
-                          setModalVisible(!modalVisible)
-                        }}>
-                        <View style={styles.centeredView}>
-                            <View style={styles.modalView}>
-                                <View style={{ marginTop: 5, marginBottom: 15 }}>
-                                    <Text
-                                        style={{ fontSize: 18, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-                                        Nový Zákon
-                                    </Text>
-                                </View>
-                                <FlatList
-                                    data={bibleData.data}
-                                    renderItem={({ item }) => <Item bookName={item.name}/>}
-                                    keyExtractor={item => item.name}
-                                />
-                                <Pressable
-                                    style={[styles.button, styles.buttonClose]}
-                                    onPress={() => setModalVisible(!modalVisible)}>
-                                    <FontAwesomeIcon icon={faXmark} size={18} color={'white'}/>
-                                </Pressable>
+            {bookData.length > 0 && (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                      setModalVisible(!modalVisible)
+                    }}>
+                    <View style={styles.centeredView}>
+                        <View style={styles.modalView}>
+                            <View style={{ marginTop: 5, marginBottom: 15 }}>
+                                <Text
+                                    style={{ fontSize: 18, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                                    Nový Zákon
+                                </Text>
                             </View>
+                            <FlatList
+                                data={bibleData.data}
+                                renderItem={({ item }) => <Item bookName={item.name}/>}
+                                keyExtractor={item => item.name}
+                            />
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={() => setModalVisible(!modalVisible)}>
+                                <FontAwesomeIcon icon={faXmark} size={18} color={'white'}/>
+                            </Pressable>
                         </View>
-                    </Modal>
-                )}
-            </View>
+                    </View>
+                </Modal>
+            )}
             <StatusBar barStyle="light-content"/>
+            <View style={{ paddingTop: 20, paddingHorizontal: 15 }}>
+                <ScrollView>
+                    {chapterContent.length > 0 && chapterContent.map((item) => (
+                        <>
+                            {item.attrs.style === 's1'
+                              ? (
+                                    <View style={{ marginVertical: 5 }}
+                                          key={item.items.text}>
+                                        <Text style={{ fontSize: 17, fontWeight: 'bold' }}>{item.items[0].text}</Text>
+                                    </View>
+                                )
+                              : (
+                                    <View key={item.items.text}>
+                                        <Text style={{ fontSize: 15 }}>{item.items[0].text}</Text>
+                                    </View>
+                                )}
+                        </>
+                    ))}
+                </ScrollView>
+            </View>
         </View>
   )
 }
@@ -172,9 +190,9 @@ export const Commentary = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center'
+    backgroundColor: '#fff'
+    // alignItems: 'center',
+    // justifyContent: 'flex-start'
   },
   centeredView: {
     flex: 1,
