@@ -22,7 +22,7 @@ export const Commentary = ({ navigation }) => {
     http
       .get('/bibles/c0209b58481727a2-01/books').then(response => {
         setBibleData(response.data)
-      // console.log(response.data.data[0].id)
+        // console.log(response.data.data[0].id)
       })
       .catch(function (error) {
         // handle error
@@ -54,8 +54,8 @@ export const Commentary = ({ navigation }) => {
       headers: { 'api-key': API_KEY }
     })
     http
-      .get('/bibles/c0209b58481727a2-01/passages/REV.21').then(response => {
-        convertText(response.data.data.content)
+      .get('/bibles/c0209b58481727a2-01/passages/REV.21?content-type=json').then(response => {
+        setChapterContent(response.data.data.content)
       })
       .catch(function (error) {
         // handle error
@@ -63,27 +63,22 @@ export const Commentary = ({ navigation }) => {
       })
   }
 
-  const convertText = (text) => {
-    console.log(text)
-    // setChapterContent(convertedText)
-  }
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => (
-          <TouchableOpacity
-              activeOpacity={1}
-              style={{
-                backgroundColor: '#566370',
-                padding: 7,
-                borderRadius: 15,
-                marginBottom: 10
-              }}
-              onPress={() => {
-                setModalVisible(true)
-              }}>
-            <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
-          </TouchableOpacity>
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                      backgroundColor: '#566370',
+                      padding: 7,
+                      borderRadius: 15,
+                      marginBottom: 10
+                    }}
+                    onPress={() => {
+                      setModalVisible(true)
+                    }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
+                </TouchableOpacity>
       ),
       headerStyle: {
         backgroundColor: '#2D343B',
@@ -98,79 +93,79 @@ export const Commentary = ({ navigation }) => {
   }
 
   const Item = ({ bookName }) => (
-      <View style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
-        <TouchableOpacity onPress={() => handleClick(bookName)} style={{ padding: 15 }}>
-          <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
-            {bookName}
-          </Text>
-        </TouchableOpacity>
-        {chapterVisible === bookName && (
-            <View style={{
-              paddingTop: 15,
-              paddingLeft: 20,
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              width: '100%'
-            }}>
-              {Array(chaptersNumber)
-                .fill(0)
-                .map((x, idx) => (
-                      <TouchableOpacity key={idx} style={{
-                        backgroundColor: currentData.book === bookName && currentData.chapter === (idx + 1) ? '#566370' : '#2D343B',
-                        justifyContent: 'center',
-                        alignSelf: 'flex-start',
-                        width: 40,
-                        height: 40,
-                        borderRadius: 20,
-                        marginRight: 15,
-                        marginBottom: 15
-                      }}>
-                        <Text style={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-                          {idx + 1}
-                        </Text>
-                      </TouchableOpacity>
-                ))}
-            </View>
-        )}
-      </View>
+        <View style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
+            <TouchableOpacity onPress={() => handleClick(bookName)} style={{ padding: 15 }}>
+                <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
+                    {bookName}
+                </Text>
+            </TouchableOpacity>
+            {chapterVisible === bookName && (
+                <View style={{
+                  paddingTop: 15,
+                  paddingLeft: 20,
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  width: '100%'
+                }}>
+                    {Array(chaptersNumber)
+                      .fill(0)
+                      .map((x, idx) => (
+                            <TouchableOpacity key={idx} style={{
+                              backgroundColor: currentData.book === bookName && currentData.chapter === (idx + 1) ? '#566370' : '#2D343B',
+                              justifyContent: 'center',
+                              alignSelf: 'flex-start',
+                              width: 40,
+                              height: 40,
+                              borderRadius: 20,
+                              marginRight: 15,
+                              marginBottom: 15
+                            }}>
+                                <Text style={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                                    {idx + 1}
+                                </Text>
+                            </TouchableOpacity>
+                      ))}
+                </View>
+            )}
+        </View>
   )
 
   return (
-      <View style={styles.container}>
-        <View style={styles.centeredView}>
-          {bookData.length > 0 && (
-              <Modal
-                  animationType="slide"
-                  transparent={true}
-                  visible={modalVisible}
-                  onRequestClose={() => {
-                    setModalVisible(!modalVisible)
-                  }}>
-                <View style={styles.centeredView}>
-                  <View style={styles.modalView}>
-                    <View style={{ marginTop: 5, marginBottom: 15 }}>
-                      <Text
-                          style={{ fontSize: 18, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-                        Nový Zákon
-                      </Text>
-                    </View>
-                    <FlatList
-                        data={bibleData.data}
-                        renderItem={({ item }) => <Item bookName={item.name}/>}
-                        keyExtractor={item => item.name}
-                    />
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}>
-                      <FontAwesomeIcon icon={faXmark} size={18} color={'white'}/>
-                    </Pressable>
-                  </View>
-                </View>
-              </Modal>
-          )}
+        <View style={styles.container}>
+            <View style={styles.centeredView}>
+                {bookData.length > 0 && (
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                          setModalVisible(!modalVisible)
+                        }}>
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <View style={{ marginTop: 5, marginBottom: 15 }}>
+                                    <Text
+                                        style={{ fontSize: 18, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
+                                        Nový Zákon
+                                    </Text>
+                                </View>
+                                <FlatList
+                                    data={bibleData.data}
+                                    renderItem={({ item }) => <Item bookName={item.name}/>}
+                                    keyExtractor={item => item.name}
+                                />
+                                <Pressable
+                                    style={[styles.button, styles.buttonClose]}
+                                    onPress={() => setModalVisible(!modalVisible)}>
+                                    <FontAwesomeIcon icon={faXmark} size={18} color={'white'}/>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </Modal>
+                )}
+            </View>
+            <StatusBar barStyle="light-content"/>
         </View>
-        <StatusBar barStyle="light-content"/>
-      </View>
   )
 }
 
