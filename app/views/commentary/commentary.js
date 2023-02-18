@@ -12,7 +12,7 @@ export const Commentary = ({ navigation }) => {
   const [chaptersNumber, setChaptersNumber] = useState(null)
   const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
-  const [chapterContent, setChapterContent] = useState({})
+  const [chapterContent, setChapterContent] = useState(null)
 
   useEffect(() => {
     const http = axios.create({
@@ -54,7 +54,7 @@ export const Commentary = ({ navigation }) => {
       headers: { 'api-key': API_KEY }
     })
     http
-      .get('/bibles/c0209b58481727a2-01/passages/REV.21?content-type=json&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=false&include-verse-spans=false&use-org-id=false').then(response => {
+      .get('/bibles/c0209b58481727a2-01/chapters/Rev.21?content-type=json&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false').then(response => {
         setChapterContent(response.data.data.content)
       })
       .catch(function (error) {
@@ -165,6 +165,9 @@ export const Commentary = ({ navigation }) => {
             <StatusBar barStyle="light-content"/>
             <View style={{ paddingTop: 20, paddingHorizontal: 15 }}>
                 <ScrollView>
+                    <View>
+
+                    </View>
                     {chapterContent.length > 0 && chapterContent.map((item) => (
                         <>
                             {item.attrs.style === 's1'
@@ -175,10 +178,35 @@ export const Commentary = ({ navigation }) => {
                                     </View>
                                 )
                               : (
-                                    <View key={item.items.text}>
-                                        <Text style={{ fontSize: 15 }}>{item.items[0].text}</Text>
-                                    </View>
+                                    <>
+                                        {item.items.map(el => console.log(el))}
+                                    </>
                                 )}
+
+                            {item.attrs.style !== 's1' && (
+                              item.items.map((el, index) => (
+                                    <View key={index} style={{ borderColor: 'orange', borderWidth: 1 }}>
+                                        <View>
+                                            {el.attrs.number &&
+                                                (
+                                                    <Text
+                                                        style={{
+                                                          fontSize: 17,
+                                                          fontWeight: 'bold'
+                                                        }}>{el.items[0].text}</Text>
+                                                )}
+                                        </View>
+                                        <View>
+                                            {el.text &&
+                                                (
+                                                    <Text style={{ fontSize: 15 }}>{el.text}</Text>
+                                                )}
+                                        </View>
+                                    </View>
+                              ))
+                            )
+
+                            }
                         </>
                     ))}
                 </ScrollView>
