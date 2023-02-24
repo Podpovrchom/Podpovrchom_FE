@@ -12,7 +12,7 @@ export const Commentary = ({ navigation }) => {
   const [chaptersNumber, setChaptersNumber] = useState(null)
   const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
-  const [chapterContent, setChapterContent] = useState(null)
+  const [chapterContent, setChapterContent] = useState([])
 
   useEffect(() => {
     const http = axios.create({
@@ -55,7 +55,58 @@ export const Commentary = ({ navigation }) => {
     })
     http
       .get('/bibles/c0209b58481727a2-01/chapters/Rev.21?content-type=json&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false').then(response => {
-        setChapterContent(response.data.data.content)
+        const data = response.data.data.content
+        let newData = []
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].attrs.style === 's1') {
+            const array = {}
+            array.text = data[i].items[0].text
+            array.type = 'title'
+            newData = [...newData, array]
+          } else if (data[i].attrs.style === 'q1') {
+            if (data[i].items.length > 1) {
+              const array = {}
+              array.verseId = data[i].items[1].attrs.verseId
+              array.text = data[i].items[1].text
+              newData = [...newData, array]
+            } else {
+              const array = {}
+              array.verseId = data[i].items[0].attrs.verseId
+              array.text = data[i].items[0].text
+              newData = [...newData, array]
+            }
+          } else {
+            const maslo = data[i].items.filter(item => item.attrs.verseId)
+            for (let i = 0; i < maslo.length; i++) {
+              const array = {}
+              array.verseId = maslo[i].attrs.verseId
+              array.text = maslo[i].text
+              newData = [...newData, array]
+            }
+          }
+        }
+
+        const formatedData = []
+        let versId = ''
+        let fullText = ''
+        let versNumber = 0
+        for (const x of newData) {
+          // console.log(x)
+          if (x && Object.keys(x).includes('verseId')) {
+            if (versId === x.verseId) {
+              fullText += (' ' + x.text)
+            } else {
+              fullText.length > 0 && formatedData.push({ text: fullText, verseId: versId, id: versNumber })
+              versId = x.verseId
+              fullText = x.text
+              versNumber = versNumber + 1
+            }
+          } else {
+            formatedData.push(x)
+          }
+        }
+        console.log(formatedData)
+        setChapterContent(formatedData)
       })
       .catch(function (error) {
         // handle error
@@ -165,10 +216,30 @@ export const Commentary = ({ navigation }) => {
             <StatusBar barStyle="light-content"/>
             <View style={{ paddingTop: 20, paddingHorizontal: 15 }}>
                 <ScrollView>
-                    <View>
+                    {chapterContent.length > 0 && chapterContent.map((item, index) => (
+                        <>
+                            {item.type === 'title'
+                              ? (
+                                    <View key={index}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{item.text}</Text>
+                                    </View>
+                                )
+                              : (
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ fontSize: 15 }}>
+                                            <Text style={{
+                                              fontSize: 15,
+                                              color: '#00CFE6',
+                                              fontWeight: 'bold'
+                                            }}>{item.id}</Text>
+                                            {item.text}
+                                        </Text>
+                                    </View>
+                                )}
+                        </>
 
-                    </View>
-                    {chapterContent.length > 0 && chapterContent.map((item) => (
+                    ))}
+                    {/*  {chapterContent.length > 0 && chapterContent.map((item) => (
                         <>
                             {item.attrs.style === 's1'
                               ? (
@@ -208,7 +279,7 @@ export const Commentary = ({ navigation }) => {
 
                             }
                         </>
-                    ))}
+                    ))} */}
                 </ScrollView>
             </View>
         </View>
