@@ -132,7 +132,7 @@ export const Commentary = ({ navigation }) => {
                 </TouchableOpacity>
       ),
       headerStyle: {
-        backgroundColor: '#2D343B',
+        backgroundColor: '#1B1F23',
         shadowColor: 'transparent', // ios
         elevation: 0 // android
       }
@@ -214,7 +214,7 @@ export const Commentary = ({ navigation }) => {
                 </Modal>
             )}
             <StatusBar barStyle="light-content"/>
-            <View style={{ paddingTop: 20, paddingHorizontal: 15, backgroundColor: '#1B1F23' }}>
+            <View style={{ paddingTop: 5, paddingHorizontal: 15, backgroundColor: '#1B1F23' }}>
                 <ScrollView>
                     {chapterContent.length > 0 && chapterContent.map((item, index) => (
                         <>
