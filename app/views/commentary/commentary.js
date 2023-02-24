@@ -12,7 +12,7 @@ export const Commentary = ({ navigation }) => {
   const [chaptersNumber, setChaptersNumber] = useState(null)
   const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
-  const [chapterContent, setChapterContent] = useState(null)
+  const [chapterContent, setChapterContent] = useState([])
 
   useEffect(() => {
     const http = axios.create({
@@ -89,20 +89,23 @@ export const Commentary = ({ navigation }) => {
         const formatedData = []
         let versId = ''
         let fullText = ''
+        let versNumber = 0
         for (const x of newData) {
           // console.log(x)
           if (x && Object.keys(x).includes('verseId')) {
             if (versId === x.verseId) {
               fullText += (' ' + x.text)
             } else {
-              fullText.length > 0 && formatedData.push({ text: fullText, verseId: versId })
+              fullText.length > 0 && formatedData.push({ text: fullText, verseId: versId, id: versNumber })
               versId = x.verseId
               fullText = x.text
+              versNumber = versNumber + 1
             }
           } else {
             formatedData.push(x)
           }
         }
+        console.log(formatedData)
         setChapterContent(formatedData)
       })
       .catch(function (error) {
@@ -213,6 +216,29 @@ export const Commentary = ({ navigation }) => {
             <StatusBar barStyle="light-content"/>
             <View style={{ paddingTop: 20, paddingHorizontal: 15 }}>
                 <ScrollView>
+                    {chapterContent.length > 0 && chapterContent.map((item, index) => (
+                        <>
+                            {item.type === 'title'
+                              ? (
+                                    <View key={index}>
+                                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{item.text}</Text>
+                                    </View>
+                                )
+                              : (
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ fontSize: 15 }}>
+                                            <Text style={{
+                                              fontSize: 15,
+                                              color: '#00CFE6',
+                                              fontWeight: 'bold'
+                                            }}>{item.id}</Text>
+                                            {item.text}
+                                        </Text>
+                                    </View>
+                                )}
+                        </>
+
+                    ))}
                     {/*  {chapterContent.length > 0 && chapterContent.map((item) => (
                         <>
                             {item.attrs.style === 's1'
