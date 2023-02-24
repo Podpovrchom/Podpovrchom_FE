@@ -214,27 +214,31 @@ export const Commentary = ({ navigation }) => {
                 </Modal>
             )}
             <StatusBar barStyle="light-content"/>
-            <View style={{ paddingTop: 20, paddingHorizontal: 15 }}>
+            <View style={{ paddingTop: 20, paddingHorizontal: 15, backgroundColor: '#1B1F23' }}>
                 <ScrollView>
                     {chapterContent.length > 0 && chapterContent.map((item, index) => (
                         <>
                             {item.type === 'title'
                               ? (
-                                    <View key={index}>
-                                        <Text style={{ fontWeight: 'bold', fontSize: 17 }}>{item.text}</Text>
+                                    <View style={{ marginTop: 5, marginBottom: 10 }}>
+                                        <Text style={{
+                                          fontWeight: 'bold',
+                                          fontSize: 17,
+                                          color: '#F0F0F0'
+                                        }}>{item.text}</Text>
                                     </View>
                                 )
                               : (
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ fontSize: 15 }}>
-                                            <Text style={{
-                                              fontSize: 15,
+                                    <TouchableOpacity style={{ flexDirection: 'row', marginBottom: 5 }}>
+                                        <Text style={{ fontSize: 16, color: '#F0F0F0' }}>
+                                            <View style={{ paddingRight: 5 }}><Text style={{
+                                              fontSize: 12,
                                               color: '#00CFE6',
                                               fontWeight: 'bold'
-                                            }}>{item.id}</Text>
+                                            }}>{item.id}</Text></View>
                                             {item.text}
                                         </Text>
-                                    </View>
+                                    </TouchableOpacity>
                                 )}
                         </>
 
