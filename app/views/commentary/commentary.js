@@ -22,7 +22,6 @@ export const Commentary = ({ navigation }) => {
     http
       .get('/bibles/c0209b58481727a2-01/books').then(response => {
         setBibleData(response.data)
-        // console.log(response.data.data[0].id)
       })
       .catch(function (error) {
         // handle error
@@ -91,7 +90,6 @@ export const Commentary = ({ navigation }) => {
         let fullText = ''
         let versNumber = 0
         for (const x of newData) {
-          // console.log(x)
           if (x && Object.keys(x).includes('verseId')) {
             if (versId === x.verseId) {
               fullText += (' ' + x.text)
@@ -105,7 +103,6 @@ export const Commentary = ({ navigation }) => {
             formatedData.push(x)
           }
         }
-        console.log(formatedData)
         setChapterContent(formatedData)
       })
       .catch(function (error) {
