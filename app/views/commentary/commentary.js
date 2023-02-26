@@ -152,27 +152,19 @@ export const Commentary = ({ navigation }) => {
                             {item.type === 'title'
                               ? (
                                     <View style={{ marginTop: 5, marginBottom: 10 }}>
-                                        <Text style={{
-                                          fontWeight: 'bold',
-                                          fontSize: 17,
-                                          color: '#F0F0F0'
-                                        }}>{item.text}</Text>
+                                        <Text style={styles.title}>{item.text}</Text>
                                     </View>
                                 )
                               : (
                                     <TouchableOpacity style={{ flexDirection: 'row', marginBottom: 5 }}>
                                         <Text style={{ fontSize: 16, color: '#F0F0F0' }}>
-                                            <View style={{ paddingRight: 5 }}><Text style={{
-                                              fontSize: 12,
-                                              color: '#00CFE6',
-                                              fontWeight: 'bold'
-                                            }}>{item.id}</Text></View>
+                                            <View style={{ paddingRight: 5 }}><Text
+                                                style={styles.numberStyle}>{item.id}</Text></View>
                                             {item.text}
                                         </Text>
                                     </TouchableOpacity>
                                 )}
                         </>
-
                     ))}
                 </ScrollView>
             </View>
@@ -184,7 +176,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
-    // alignItems: 'center',
-    // justifyContent: 'flex-start'
+  },
+  title: {
+    fontWeight: 'bold',
+    fontSize: 17,
+    color: '#F0F0F0'
+  },
+  numberStyle: {
+    fontSize: 12,
+    color: '#00CFE6',
+    fontWeight: 'bold'
   }
 })
