@@ -243,47 +243,6 @@ export const Commentary = ({ navigation }) => {
                         </>
 
                     ))}
-                    {/*  {chapterContent.length > 0 && chapterContent.map((item) => (
-                        <>
-                            {item.attrs.style === 's1'
-                              ? (
-                                    <View style={{ marginVertical: 5 }}
-                                          key={item.items.text}>
-                                        <Text style={{ fontSize: 17, fontWeight: 'bold' }}>{item.items[0].text}</Text>
-                                    </View>
-                                )
-                              : (
-                                    <>
-                                        {item.items.map(el => console.log(el))}
-                                    </>
-                                )}
-
-                            {item.attrs.style !== 's1' && (
-                              item.items.map((el, index) => (
-                                    <View key={index} style={{ borderColor: 'orange', borderWidth: 1 }}>
-                                        <View>
-                                            {el.attrs.number &&
-                                                (
-                                                    <Text
-                                                        style={{
-                                                          fontSize: 17,
-                                                          fontWeight: 'bold'
-                                                        }}>{el.items[0].text}</Text>
-                                                )}
-                                        </View>
-                                        <View>
-                                            {el.text &&
-                                                (
-                                                    <Text style={{ fontSize: 15 }}>{el.text}</Text>
-                                                )}
-                                        </View>
-                                    </View>
-                              ))
-                            )
-
-                            }
-                        </>
-                    ))} */}
                 </ScrollView>
             </View>
         </View>
