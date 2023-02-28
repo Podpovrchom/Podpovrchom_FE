@@ -54,6 +54,10 @@ export const AppTabScreen = () => {
                 const iconName = getRouteIcon(route.name)
                 return <FontAwesomeIcon icon={iconName} size={size} color={color}/>
               },
+              tabBarHideOnKeyboard: false,
+              tabBarActiveTintColor: '#00CFE6',
+              tabBarInactiveTintColor: '#A3A3A3',
+              tabBarLabelStyle: getLabelStyles(),
               tabBarStyle: {
                 backgroundColor: '#2D343B',
                 height: 90
@@ -61,12 +65,6 @@ export const AppTabScreen = () => {
             })}
             options={{
               animationEnabled: false
-            }}
-            tabBarOptions={{
-              activeTintColor: '#00CFE6',
-              inactiveTintColor: '#A3A3A3',
-              keyboardHidesTabBar: true,
-              ...getLabelStyles()
             }}
         >
             <Tab.Screen name="Domov" component={Home}/>
