@@ -31,17 +31,13 @@ export const AppTabScreen = () => {
     if (Platform.OS === 'ios') {
       const windowHeight = useWindowDimensions().height
       return {
-        labelStyle: {
-          fontSize: 12,
-          bottom: windowHeight <= 800 ? 7 : 5
-        }
+        fontSize: 12,
+        bottom: windowHeight <= 800 ? 7 : 5
       }
     }
     return {
-      labelStyle: {
-        fontSize: 12,
-        bottom: 10
-      }
+      fontSize: 12,
+      bottom: 10
     }
   }
 
@@ -59,6 +55,7 @@ export const AppTabScreen = () => {
               tabBarInactiveTintColor: '#A3A3A3',
               tabBarLabelStyle: getLabelStyles(),
               tabBarStyle: {
+                borderTopWidth: 0,
                 backgroundColor: '#2D343B',
                 height: 90
               }
