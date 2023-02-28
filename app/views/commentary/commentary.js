@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import axios from 'axios'
 import { BooksModal } from './books_modal'
 
@@ -144,7 +144,6 @@ export const Commentary = ({ navigation }) => {
                 <BooksModal bibleData={bibleData} modalVisible={modalVisible} isVisibleModal={isVisibleModal}
                             currentData={currentData} chaptersNumber={chaptersNumber}/>
             )}
-            <StatusBar barStyle="light-content"/>
             <View style={{ paddingTop: 5, paddingHorizontal: 15, backgroundColor: '#1B1F23' }}>
                 <ScrollView>
                     {chapterContent.length > 0 && chapterContent.map((item, index) => (
