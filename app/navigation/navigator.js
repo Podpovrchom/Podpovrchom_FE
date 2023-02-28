@@ -59,6 +59,7 @@ export const AppTabScreen = () => {
               tabBarInactiveTintColor: '#A3A3A3',
               tabBarLabelStyle: getLabelStyles(),
               tabBarStyle: {
+                borderTopWidth: 0,
                 backgroundColor: '#2D343B',
                 height: 90
               }
