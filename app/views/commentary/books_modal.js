@@ -1,18 +1,37 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
+import axios from 'axios'
+import Env from '../../shared/constants/env'
 
-export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentData, chaptersNumber }) => {
+export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentData }) => {
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
+  const [chaptersNumber, setChaptersNumber] = useState(null)
 
-  const handleClick = (name) => {
+  const handleClick = (name, id) => {
     setChapterVisible(name)
+    getNumbersOfChapter(id)
   }
 
-  const Item = ({ bookName }) => (
+  const getNumbersOfChapter = (id) => {
+    const http = axios.create({
+      baseURL: 'https://api.scripture.api.bible/v1',
+      headers: { 'api-key': Env.API_KEY_BIBLE }
+    })
+    http
+      .get(`/bibles/c0209b58481727a2-01/books/${id}/chapters`).then(response => {
+        setChaptersNumber(response.data.data.length)
+      })
+      .catch(function (error) {
+        // handle error
+        alert(error.message)
+      })
+  }
+
+  const Item = ({ bookName, id }) => (
         <View style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
-            <TouchableOpacity onPress={() => handleClick(bookName)} style={{ padding: 15 }}>
+            <TouchableOpacity onPress={() => handleClick(bookName, id)} style={{ padding: 15 }}>
                 <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
                     {bookName}
                 </Text>
@@ -66,7 +85,7 @@ export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentDat
                     </View>
                     <FlatList
                         data={bibleData.data}
-                        renderItem={({ item }) => <Item bookName={item.name}/>}
+                        renderItem={({ item }) => <Item bookName={item.name} id={item.id}/>}
                         keyExtractor={item => item.name}
                     />
                     <Pressable
