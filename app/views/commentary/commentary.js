@@ -147,7 +147,7 @@ export const Commentary = ({ navigation }) => {
             <View style={{ paddingTop: 5, paddingHorizontal: 15, backgroundColor: '#1B1F23' }}>
                 <ScrollView>
                     {chapterContent.length > 0 && chapterContent.map((item, index) => (
-                        <>
+                        <View key={index}>
                             {item.type === 'title'
                               ? (
                                     <View style={{ marginTop: 5, marginBottom: 10 }}>
@@ -163,7 +163,7 @@ export const Commentary = ({ navigation }) => {
                                         </Text>
                                     </TouchableOpacity>
                                 )}
-                        </>
+                        </View>
                     ))}
                 </ScrollView>
             </View>
