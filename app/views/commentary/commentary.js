@@ -2,9 +2,9 @@ import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import axios from 'axios'
 import { BooksModal } from './books_modal'
+import Env from '../../shared/constants/env'
 
 export const Commentary = ({ navigation }) => {
-  const API_KEY = 'f21e49f9d7cfb7b360cf672c2810e6d3'
   const [bibleData, setBibleData] = useState([])
   const [modalVisible, setModalVisible] = useState(false)
   const [bookData, setBookData] = useState([])
@@ -15,7 +15,7 @@ export const Commentary = ({ navigation }) => {
   useEffect(() => {
     const http = axios.create({
       baseURL: 'https://api.scripture.api.bible/v1',
-      headers: { 'api-key': API_KEY }
+      headers: { 'api-key': Env.API_KEY_BIBLE }
     })
     http
       .get('/bibles/c0209b58481727a2-01/books').then(response => {
@@ -32,7 +32,7 @@ export const Commentary = ({ navigation }) => {
   const getBookData = () => {
     const http = axios.create({
       baseURL: 'https://api.scripture.api.bible/v1',
-      headers: { 'api-key': API_KEY }
+      headers: { 'api-key': Env.API_KEY_BIBLE }
     })
     http
       .get('/bibles/c0209b58481727a2-01/books/REV/chapters').then(response => {
@@ -48,7 +48,7 @@ export const Commentary = ({ navigation }) => {
   const getChapterContent = () => {
     const http = axios.create({
       baseURL: 'https://api.scripture.api.bible/v1',
-      headers: { 'api-key': API_KEY }
+      headers: { 'api-key': Env.API_KEY_BIBLE }
     })
     http
       .get('/bibles/c0209b58481727a2-01/chapters/Rev.21?content-type=json&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false').then(response => {
