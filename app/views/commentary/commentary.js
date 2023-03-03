@@ -113,31 +113,6 @@ export const Commentary = ({ navigation }) => {
       })
   }
 
-  /* useLayoutEffect(() => {
-                                                                 navigation.setOptions({
-                                                                   headerTitle: () => (
-                                                                             <TouchableOpacity
-                                                                                 activeOpacity={1}
-                                                                                 style={{
-                                                                                   backgroundColor: '#566370',
-                                                                                   padding: 7,
-                                                                                   borderRadius: 15,
-                                                                                   marginBottom: 10
-                                                                                 }}
-                                                                                 onPress={() => {
-                                                                                   setModalVisible(true)
-                                                                                 }}>
-                                                                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
-                                                                             </TouchableOpacity>
-                                                                   ),
-                                                                   headerStyle: {
-                                                                     backgroundColor: '#1B1F23',
-                                                                     shadowColor: 'transparent', // ios
-                                                                     elevation: 0 // android
-                                                                   }
-                                                                 })
-                                                               }, []) */
-
   const isVisibleModal = (value) => {
     setModalVisible(value)
   }
