@@ -9,8 +9,15 @@ export const Commentary = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [bookData, setBookData] = useState([])
   const [chaptersNumber, setChaptersNumber] = useState(null)
-  const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
+  const [currentData, setCurrentData] = useState({
+    abbreviation: 'Zj',
+    bibleId: 'c0209b58481727a2-01',
+    id: 'REV',
+    name: 'Zjevení',
+    nameLong: 'Zjevení Janovo'
+  })
   const [chapterContent, setChapterContent] = useState([])
+  const [chapterNumber, setChapterNumber] = useState(1)
 
   useEffect(() => {
     const http = axios.create({
@@ -19,7 +26,9 @@ export const Commentary = ({ navigation }) => {
     })
     http
       .get('/bibles/c0209b58481727a2-01/books').then(response => {
+        const data = response.data.data
         setBibleData(response.data)
+        setCurrentData(data[data.length - 1])
       })
       .catch(function (error) {
         // handle error
@@ -28,6 +37,10 @@ export const Commentary = ({ navigation }) => {
     getBookData()
     getChapterContent()
   }, [])
+
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false })
+  }, [navigation])
 
   const getBookData = () => {
     const http = axios.create({
@@ -109,37 +122,46 @@ export const Commentary = ({ navigation }) => {
       })
   }
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-                <TouchableOpacity
-                    activeOpacity={1}
-                    style={{
-                      backgroundColor: '#566370',
-                      padding: 7,
-                      borderRadius: 15,
-                      marginBottom: 10
-                    }}
-                    onPress={() => {
-                      setModalVisible(true)
-                    }}>
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
-                </TouchableOpacity>
-      ),
-      headerStyle: {
-        backgroundColor: '#1B1F23',
-        shadowColor: 'transparent', // ios
-        elevation: 0 // android
-      }
-    })
-  }, [])
-
   const isVisibleModal = (value) => {
     setModalVisible(value)
   }
 
   return (
         <View style={styles.container}>
+            <View style={{ paddingTop: 60, justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity
+                    activeOpacity={1}
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      marginBottom: 10
+                    }}
+                    onPress={() => {
+                      setModalVisible(true)
+                    }}>
+                    <View style={{
+                      backgroundColor: '#566370',
+                      paddingVertical: 7,
+                      paddingHorizontal: 10,
+                      borderTopLeftRadius: 15,
+                      borderBottomLeftRadius: 15
+                    }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.name}</Text>
+                    </View>
+                    <View style={{
+                      backgroundColor: '#566370',
+                      paddingVertical: 7,
+                      paddingHorizontal: 10,
+                      borderTopRightRadius: 15,
+                      borderBottomRightRadius: 15,
+                      marginLeft: 2
+                    }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{chapterNumber}</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+
             {bookData.length > 0 && (
                 <BooksModal bibleData={bibleData} modalVisible={modalVisible} isVisibleModal={isVisibleModal}
                             currentData={currentData} chaptersNumber={chaptersNumber}/>
@@ -174,7 +196,7 @@ export const Commentary = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#1B1F23'
   },
   title: {
     fontWeight: 'bold',

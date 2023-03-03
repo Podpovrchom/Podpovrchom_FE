@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import Env from '../../shared/constants/env'
+import { chaptersNewTestament } from '../../shared/constants/chapters'
 
 export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentData }) => {
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
@@ -29,41 +30,54 @@ export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentDat
       })
   }
 
-  const Item = ({ bookName, id }) => (
+  const Item = ({ bookName, id, index }) => (
         <View style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
             <TouchableOpacity onPress={() => handleClick(bookName, id)} style={{ padding: 15 }}>
-                <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
-                    {bookName}
-                </Text>
-            </TouchableOpacity>
-            {chapterVisible === bookName && (
-                <View style={{
-                  paddingTop: 15,
-                  paddingLeft: 20,
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                  width: '100%'
-                }}>
-                    {Array(chaptersNumber)
-                      .fill(0)
-                      .map((x, idx) => (
-                            <TouchableOpacity key={idx} style={{
-                              backgroundColor: currentData.book === bookName && currentData.chapter === (idx + 1) ? '#566370' : '#2D343B',
-                              justifyContent: 'center',
-                              alignSelf: 'flex-start',
-                              width: 40,
-                              height: 40,
-                              borderRadius: 20,
-                              marginRight: 15,
-                              marginBottom: 15
-                            }}>
-                                <Text style={{ fontSize: 15, color: 'white', textAlign: 'center', fontWeight: 'bold' }}>
-                                    {idx + 1}
-                                </Text>
-                            </TouchableOpacity>
-                      ))}
+                <View>
+                    <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
+                        {bookName}
+                    </Text>
                 </View>
-            )}
+                {chapterVisible === bookName && (
+                    <View style={{
+                      paddingTop: 15,
+                      paddingLeft: 20,
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                      width: '100%'
+                    }}>
+                        {chaptersNewTestament
+                          .map((chapter, idx) => (
+                            idx === index &&
+                                Array(chapter.number)
+                                  .fill(0)
+                                  .map((x, idx) => (
+                                        <TouchableOpacity key={idx} style={{
+                                          backgroundColor: currentData.book === bookName && currentData.chapter === (idx + 1) ? '#566370' : '#2D343B',
+                                          justifyContent: 'center',
+                                          alignSelf: 'flex-start',
+                                          width: 40,
+                                          height: 40,
+                                          borderRadius: 20,
+                                          marginRight: 15,
+                                          marginBottom: 15
+                                        }}>
+                                            <Text style={{
+                                              fontSize: 15,
+                                              color: 'white',
+                                              textAlign: 'center',
+                                              fontWeight: 'bold'
+                                            }}>
+                                                {idx + 1}
+                                            </Text>
+                                        </TouchableOpacity>
+                                  ))
+                          ))}
+                    </View>
+                )}
+
+            </TouchableOpacity>
+
         </View>
   )
 
@@ -85,7 +99,7 @@ export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentDat
                     </View>
                     <FlatList
                         data={bibleData.data}
-                        renderItem={({ item }) => <Item bookName={item.name} id={item.id}/>}
+                        renderItem={({ item, index }) => <Item bookName={item.name} id={item.id} index={index}/>}
                         keyExtractor={item => item.name}
                     />
                     <Pressable
