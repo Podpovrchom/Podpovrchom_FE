@@ -9,8 +9,15 @@ export const Commentary = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false)
   const [bookData, setBookData] = useState([])
   const [chaptersNumber, setChaptersNumber] = useState(null)
-  const [currentData, setCurrentData] = useState({ book: 'Zjevení', chapter: 1 })
+  const [currentData, setCurrentData] = useState({
+    abbreviation: 'Zj',
+    bibleId: 'c0209b58481727a2-01',
+    id: 'REV',
+    name: 'Zjevení',
+    nameLong: 'Zjevení Janovo'
+  })
   const [chapterContent, setChapterContent] = useState([])
+  const [chapterNumber, setChapterNumber] = useState(1)
 
   useEffect(() => {
     const http = axios.create({
@@ -19,7 +26,9 @@ export const Commentary = ({ navigation }) => {
     })
     http
       .get('/bibles/c0209b58481727a2-01/books').then(response => {
+        const data = response.data.data
         setBibleData(response.data)
+        setCurrentData(data[data.length - 1])
       })
       .catch(function (error) {
         // handle error
@@ -138,7 +147,7 @@ export const Commentary = ({ navigation }) => {
                       borderTopLeftRadius: 15,
                       borderBottomLeftRadius: 15
                     }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.name}</Text>
                     </View>
                     <View style={{
                       backgroundColor: '#566370',
@@ -148,7 +157,7 @@ export const Commentary = ({ navigation }) => {
                       borderBottomRightRadius: 15,
                       marginLeft: 2
                     }}>
-                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.chapter}</Text>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{chapterNumber}</Text>
                     </View>
                 </TouchableOpacity>
             </View>
