@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 import Env from '../../shared/constants/env'
+import { chaptersNewTestament } from '../../shared/constants/chapters'
 
 export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentData }) => {
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
