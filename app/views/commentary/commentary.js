@@ -114,29 +114,29 @@ export const Commentary = ({ navigation }) => {
   }
 
   /* useLayoutEffect(() => {
-                             navigation.setOptions({
-                               headerTitle: () => (
-                                         <TouchableOpacity
-                                             activeOpacity={1}
-                                             style={{
-                                               backgroundColor: '#566370',
-                                               padding: 7,
-                                               borderRadius: 15,
-                                               marginBottom: 10
-                                             }}
-                                             onPress={() => {
-                                               setModalVisible(true)
-                                             }}>
-                                             <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
-                                         </TouchableOpacity>
-                               ),
-                               headerStyle: {
-                                 backgroundColor: '#1B1F23',
-                                 shadowColor: 'transparent', // ios
-                                 elevation: 0 // android
-                               }
-                             })
-                           }, []) */
+                                                                 navigation.setOptions({
+                                                                   headerTitle: () => (
+                                                                             <TouchableOpacity
+                                                                                 activeOpacity={1}
+                                                                                 style={{
+                                                                                   backgroundColor: '#566370',
+                                                                                   padding: 7,
+                                                                                   borderRadius: 15,
+                                                                                   marginBottom: 10
+                                                                                 }}
+                                                                                 onPress={() => {
+                                                                                   setModalVisible(true)
+                                                                                 }}>
+                                                                                 <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
+                                                                             </TouchableOpacity>
+                                                                   ),
+                                                                   headerStyle: {
+                                                                     backgroundColor: '#1B1F23',
+                                                                     shadowColor: 'transparent', // ios
+                                                                     elevation: 0 // android
+                                                                   }
+                                                                 })
+                                                               }, []) */
 
   const isVisibleModal = (value) => {
     setModalVisible(value)
@@ -148,16 +148,33 @@ export const Commentary = ({ navigation }) => {
                 <TouchableOpacity
                     activeOpacity={1}
                     style={{
-                      backgroundColor: '#566370',
-                      paddingVertical: 7,
-                      paddingHorizontal: 10,
-                      borderRadius: 15,
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                       marginBottom: 10
                     }}
                     onPress={() => {
                       setModalVisible(true)
                     }}>
-                    <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
+                    <View style={{
+                      backgroundColor: '#566370',
+                      paddingVertical: 7,
+                      paddingHorizontal: 10,
+                      borderTopLeftRadius: 15,
+                      borderBottomLeftRadius: 15
+                    }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
+                    </View>
+                    <View style={{
+                      backgroundColor: '#566370',
+                      paddingVertical: 7,
+                      paddingHorizontal: 10,
+                      borderTopRightRadius: 15,
+                      borderBottomRightRadius: 15,
+                      marginLeft: 2
+                    }}>
+                        <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.chapter}</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
 
