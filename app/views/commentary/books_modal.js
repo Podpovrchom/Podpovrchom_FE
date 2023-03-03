@@ -1,5 +1,16 @@
 import React, { useState } from 'react'
-import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import {
+  FlatList,
+  Modal,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  LayoutAnimation,
+  UIManager
+} from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
@@ -9,6 +20,13 @@ import { chaptersNewTestament } from '../../shared/constants/chapters'
 export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentData }) => {
   const [chapterVisible, setChapterVisible] = useState(currentData.book)
   const [chaptersNumber, setChaptersNumber] = useState(null)
+
+  if (
+    Platform.OS === 'android' &&
+        UIManager.setLayoutAnimationEnabledExperimental
+  ) {
+    UIManager.setLayoutAnimationEnabledExperimental(true)
+  }
 
   const handleClick = (name, id) => {
     setChapterVisible(name)
@@ -32,7 +50,10 @@ export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentDat
 
   const Item = ({ bookName, id, index }) => (
         <View style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
-            <TouchableOpacity onPress={() => handleClick(bookName, id)} style={{ padding: 15 }}>
+            <TouchableOpacity onPress={() => {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+              handleClick(bookName, id)
+            }} style={{ padding: 15 }}>
                 <View>
                     <Text style={{ color: 'white', fontSize: 15, fontWeight: 'bold' }}>
                         {bookName}
