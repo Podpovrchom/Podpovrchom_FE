@@ -29,6 +29,10 @@ export const Commentary = ({ navigation }) => {
     getChapterContent()
   }, [])
 
+  useLayoutEffect(() => {
+    navigation.setOptions({ headerShown: false })
+  }, [navigation])
+
   const getBookData = () => {
     const http = axios.create({
       baseURL: 'https://api.scripture.api.bible/v1',
@@ -109,14 +113,44 @@ export const Commentary = ({ navigation }) => {
       })
   }
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
+  /* useLayoutEffect(() => {
+                             navigation.setOptions({
+                               headerTitle: () => (
+                                         <TouchableOpacity
+                                             activeOpacity={1}
+                                             style={{
+                                               backgroundColor: '#566370',
+                                               padding: 7,
+                                               borderRadius: 15,
+                                               marginBottom: 10
+                                             }}
+                                             onPress={() => {
+                                               setModalVisible(true)
+                                             }}>
+                                             <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
+                                         </TouchableOpacity>
+                               ),
+                               headerStyle: {
+                                 backgroundColor: '#1B1F23',
+                                 shadowColor: 'transparent', // ios
+                                 elevation: 0 // android
+                               }
+                             })
+                           }, []) */
+
+  const isVisibleModal = (value) => {
+    setModalVisible(value)
+  }
+
+  return (
+        <View style={styles.container}>
+            <View style={{ paddingTop: 60, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1B1F23' }}>
                 <TouchableOpacity
                     activeOpacity={1}
                     style={{
                       backgroundColor: '#566370',
-                      padding: 7,
+                      paddingVertical: 7,
+                      paddingHorizontal: 10,
                       borderRadius: 15,
                       marginBottom: 10
                     }}
@@ -125,21 +159,8 @@ export const Commentary = ({ navigation }) => {
                     }}>
                     <Text style={{ color: 'white', fontWeight: 'bold' }}>{currentData.book}</Text>
                 </TouchableOpacity>
-      ),
-      headerStyle: {
-        backgroundColor: '#1B1F23',
-        shadowColor: 'transparent', // ios
-        elevation: 0 // android
-      }
-    })
-  }, [])
+            </View>
 
-  const isVisibleModal = (value) => {
-    setModalVisible(value)
-  }
-
-  return (
-        <View style={styles.container}>
             {bookData.length > 0 && (
                 <BooksModal bibleData={bibleData} modalVisible={modalVisible} isVisibleModal={isVisibleModal}
                             currentData={currentData} chaptersNumber={chaptersNumber}/>
