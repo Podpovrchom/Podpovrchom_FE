@@ -128,7 +128,7 @@ export const Commentary = ({ navigation }) => {
 
   return (
         <View style={styles.container}>
-            <View style={{ paddingTop: 60, justifyContent: 'center', alignItems: 'center', backgroundColor: '#1B1F23' }}>
+            <View style={{ paddingTop: 60, justifyContent: 'center', alignItems: 'center' }}>
                 <TouchableOpacity
                     activeOpacity={1}
                     style={{
@@ -196,7 +196,7 @@ export const Commentary = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#1B1F23'
   },
   title: {
     fontWeight: 'bold',
