@@ -50,7 +50,7 @@ export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentDat
 
   const Item = ({ bookName, id, index }) => (
         <View style={{ backgroundColor: '#2D343B', marginBottom: 7, borderRadius: 7 }}>
-            <TouchableOpacity onPress={() => {
+            <TouchableOpacity activeOpacity={1} onPress={() => {
               LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
               handleClick(bookName, id)
             }} style={{ padding: 15 }}>
