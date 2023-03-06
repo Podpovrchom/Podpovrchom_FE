@@ -30,7 +30,7 @@ export const BooksModal = ({ bibleData, modalVisible, isVisibleModal, currentDat
 
   const handleClick = (name, id) => {
     setChapterVisible(name)
-    getNumbersOfChapter(id)
+    // getNumbersOfChapter(id)
   }
 
   const getNumbersOfChapter = (id) => {
